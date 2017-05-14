@@ -7,6 +7,7 @@ class Agent {
         @JvmStatic
         fun premain(agentArgs: String?, inst: Instrumentation) {
             println("Agent started.")
+            inst.addTransformer(TestMethodTransformer())
         }
     }
 }
