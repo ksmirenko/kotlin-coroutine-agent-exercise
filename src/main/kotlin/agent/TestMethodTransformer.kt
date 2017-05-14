@@ -6,15 +6,14 @@ import java.lang.instrument.ClassFileTransformer
 import java.security.ProtectionDomain
 
 /**
- * An implementation of [ClassFileTransformer] that detects CoroutineExampleKt.test() launches
- * and prepends them with printing "Test detected".
+ * A [ClassFileTransformer] that detects example.CoroutineExampleKt.test() launches in the given class.
  */
 class TestMethodTransformer : ClassFileTransformer {
     override fun transform(loader: ClassLoader?, className: String?,
                            classBeingRedefined: Class<*>?, protectionDomain: ProtectionDomain?,
                            classfileBuffer: ByteArray?): ByteArray {
         val classReader = ClassReader(classfileBuffer)
-        // no flags for ClassWriter, as we modify maxs manually and frames count is unchanged
+        // no flags for ClassWriter, as we modify maxs manually and frame count is unchanged
         val classWriter = ClassWriter(classReader, 0)
         classReader.accept(TestDetectorAdapter(classWriter), 0)
 
@@ -22,6 +21,10 @@ class TestMethodTransformer : ClassFileTransformer {
     }
 }
 
+/**
+ * A [ClassVisitor] that detects example.CoroutineExampleKt.test() launches
+ * and prepends them with printing "Test detected".
+ */
 class TestDetectorAdapter(
         private val classWriter: ClassWriter
 ) : ClassVisitor(ASM5, classWriter) {
