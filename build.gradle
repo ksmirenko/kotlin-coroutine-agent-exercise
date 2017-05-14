@@ -41,3 +41,9 @@ task runApp(type: JavaExec, dependsOn: build) {
     main = "example.CoroutineExampleKt"
     jvmArgs += ["-javaagent:${jar.getArchivePath()}"]
 }
+
+task runAdvanced(type: JavaExec, dependsOn: build) {
+    classpath = sourceSets.test.runtimeClasspath
+    main = "example.AdvancedCoroutineExampleKt"
+    jvmArgs += ["-javaagent:${jar.getArchivePath()}"]
+}
